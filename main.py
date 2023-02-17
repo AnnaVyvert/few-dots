@@ -204,6 +204,20 @@ def enemy_collapse():
             data["game_is_over"] = True
 
 
+def enemies_collapse():
+    for i in range(len(enemy_positions)):
+        for j in range(i + 1, len(enemy_positions)):
+            e = enemy_positions[i]
+            e2 = enemy_positions[j]
+            if e[0] is None or e[1] is None: continue
+            collapse_condition = e2[0] - circle_radius < e[0] < e2[0] + circle_radius and \
+                                 e2[1] - circle_radius < \
+                                 e[1] < e2[1] + circle_radius
+            if collapse_condition:
+                e[0] = random.randint(0, canvas_width * random.randint(0, 1))
+                e[1] = random.randint(0, canvas_height * random.randint(0, 1))
+
+
 def on_tick():
     update()  # обновляем положение объектов на канве
     if data['counter'] % food_tick_create == 0:
@@ -216,6 +230,7 @@ def on_tick():
     move_enemies()
     check_hunter_collapse()
     enemy_collapse()
+    enemies_collapse()
     round_move()
     # field_borders()
 
@@ -267,23 +282,25 @@ def right_direction(p1, p2, axis):
     # return p1[axis] > p2[axis]
 
 
-def to_the_up(self):
+def to_the_up(event):
     data['position'][1] -= data['speed']
 
-def to_the_left(self):
+
+def to_the_left(event):
     data['position'][0] -= data['speed']
 
-def to_the_low(self):
+
+def to_the_low(event):
     data['position'][1] += data['speed']
 
-def to_the_right(self):
+
+def to_the_right(event):
     data['position'][0] += data['speed']
 
 
 def restart(event):
     root.title("the thing, score: " + str(0))
     data["game_is_over"] = False
-
 
 
 canvas = Canvas(root, width=canvas_width, height=canvas_height, bg="#111")
