@@ -1,2 +1,2 @@
-# red-circles-survival
+# red-dots-survival
 mini game on canvas
