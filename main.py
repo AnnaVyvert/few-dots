@@ -8,7 +8,8 @@ from storage import data
 
 root = Tk()
 
-root.title("colored-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
+init_title = "colored-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"])
+root.title(init_title)
 
 move_positions = []
 food_positions = []
@@ -23,7 +24,6 @@ def on_left_mouse_click(event):
     if not data["game_is_over"]:
         x, y = event.x, event.y
         move_positions.append([x, y])
-        # print(x, y)
         canvas.delete("move" + str(data['n_move']))
         data['n_move'] += 1
         create_circle(x, y, 4, fill="green", outline="#282828", width=2, tags='move' + str(data['n_move']))
@@ -35,7 +35,8 @@ def on_right_mouse_click(event):
     if data['n_bombs'] > 0:
         bomb_positions.append([data['position'][0], data['position'][1]])
         right_positions.append([x, y])
-        create_circle(data['position'][0], data['position'][1], 10, fill="violet", outline="#282828", width=4, tags='bomb'+str(data['n_bomb']))
+        create_circle(data['position'][0], data['position'][1], 10, fill="violet", outline="#282828", width=4,
+                      tags='bomb' + str(data['n_bomb']))
         data['n_bombs'] -= 1
         data['n_bomb'] += 1
         root.title("the thing, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
@@ -46,8 +47,9 @@ def create_food():
     y = random.randint(0, consts['canvas_height'])
     food_positions.append([x, y])
     create_circle(x, y, consts['circle_radius'], fill="yellow", outline="#282828", width=4,
-                         tags='food' + str(data['n_food']))
+                  tags='food' + str(data['n_food']))
     data['n_food'] += 1
+
 
 def create_bomb():
     x = random.randint(0, consts['canvas_width'])
@@ -61,10 +63,9 @@ def create_bomb():
 def create_enemy():
     x = consts['canvas_width'] * random.randint(0, 1)
     y = consts['canvas_height'] * random.randint(0, 1)
-    print(x, y)
     enemy_positions.append([x, y])
     create_circle(x, y, consts['circle_radius'], fill="red", outline="#282828", width=4,
-                         tags='enemy' + str(data['n_enemy']))
+                  tags='enemy' + str(data['n_enemy']))
     data['n_enemy'] += 1
 
 
@@ -96,13 +97,6 @@ def collapse_bombs():
                 canvas.delete("bomb" + str(j))
                 e[0], e[1] = None, None
                 e2[0], e2[1] = None, None
-
-def field_borders():
-    hunter_position = data['position']
-    if 0 > hunter_position[0] > consts['canvas_width']:
-        hunter_position[0] = consts['canvas_width'] / 2
-    if 0 > hunter_position[1] > consts['canvas_width']:
-        hunter_position[1] = consts['canvas_height'] / 2
 
 
 def create_circle(x, y, r, **kwargs):
@@ -163,8 +157,8 @@ def hunter_move():
     fixed_hunter_position = copy.copy(data["fix_position"])
     try:
         move_dot(hunter_position, fixed_hunter_position, move_positions[data['n_move']], data['speed'])
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 def move_dot(source_dot_position, fixed_dot_position, move_position, speed):
@@ -207,8 +201,8 @@ def round_move():
         if collapse_condition:
             data['position'] = e
             data['fix_position'] = e
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 def enemy_collapse():
@@ -257,7 +251,6 @@ def on_tick():
     get_bomb()
     round_move()
     # field_borders()
-
     canvas.delete("hunter")
     for i in range(len(enemy_positions)):
         canvas.delete("enemy" + str(i))
@@ -270,7 +263,6 @@ def on_tick():
 
 
 def draw_all():
-    # x, y = data['mouse']
     x = data['position'][0]
     y = data['position'][1]
     try:
@@ -278,9 +270,9 @@ def draw_all():
             if enemy_positions[i][0] is None: continue
             e = enemy_positions[i]
             create_circle(e[0], e[1], consts['circle_radius'], fill="red", outline="#282828", width=4,
-                                 tags='enemy' + str(i))
-    except:
-        pass
+                          tags='enemy' + str(i))
+    except Exception as e:
+        print(e)
     if not data["game_is_over"]:
         create_circle(x, y, consts['circle_radius'], fill="orange", outline="#282828", width=4, tags='hunter')
 
@@ -305,25 +297,27 @@ def right_direction(p1, p2, axis):
     return -1 if p1[axis] > p2[axis] else 1
 
 
-def to_the_up(event):
-    data['position'][1] -= data['speed']
-
-
-def to_the_left(event):
-    data['position'][0] -= data['speed']
-
-
-def to_the_low(event):
-    data['position'][1] += data['speed']
-
-
-def to_the_right(event):
-    data['position'][0] += data['speed']
-
-
 def restart(event):
-    root.title("the thing, score: " + str(0))
-    data["game_is_over"] = False
+    if data["game_is_over"] is True:
+        canvas.delete('all')
+        root.title(init_title)
+        data["game_is_over"] = False
+        data["counter"] = 0
+        data["mouse"] = (0, 0)
+        data["position"] = [consts['canvas_width'] / 2, consts['canvas_height'] / 2]
+        data["fix_position"] = [consts['canvas_width'] / 2, consts['canvas_height'] / 2]
+        data["circle_location"] = (250, 100)
+        data["circle_velocity"] = (0, 0)
+        data["n_move"] = -1
+        data["n_food"] = 0
+        data["n_enemy"] = 0
+        data["n_bomb_init"] = 0
+        data["n_bomb"] = 0
+        data["n_bombs"] = 1
+        data["eaten"] = 0
+        global move_positions, food_positions, enemy_positions, bomb_positions, bomb_init_positions
+        move_positions, food_positions, enemy_positions, bomb_positions, bomb_init_positions = [], [], [], [], []
+        on_tick()
 
 
 canvas = Canvas(root, width=consts['canvas_width'], height=consts['canvas_height'], bg="#111")
@@ -331,10 +325,6 @@ canvas.pack()
 canvas.focus_set()
 canvas.bind('<Button-1>', on_left_mouse_click)
 canvas.bind('<Button-3>', on_right_mouse_click)
-canvas.bind('<Key-w>', to_the_up)
-canvas.bind('<Key-a>', to_the_left)
-canvas.bind('<Key-s>', to_the_low)
-canvas.bind('<Key-d>', to_the_right)
 canvas.bind('<Key-r>', restart)
 
 on_tick()
