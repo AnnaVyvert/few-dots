@@ -4,10 +4,12 @@ from tkinter import *
 import math
 import copy
 from config import consts
+from storage import data
+
 
 root = Tk()
 
-root.title("the thing, score: " + str(0))
+root.title("colored-dots, score: " + str(0))
 
 
 move_positions = []
@@ -89,22 +91,6 @@ def _create_circle(self, x, y, r, **kwargs):
 
 
 Canvas.create_circle = _create_circle
-
-data = {
-    "game_is_over": False,
-    "counter": 0,
-    "mouse": (0, 0),
-    "position": [consts['canvas_width'] / 2, consts['canvas_height'] / 2],
-    "fix_position": [consts['canvas_width'] / 2, consts['canvas_height'] / 2],
-    "circle_location": (250, 100),
-    "circle_velocity": (0, 0),  # добавили вектор скорости кружочка
-    "speed": 3,  # снизим скорость чуток
-    "n_move": -1,
-    "n_food": 0,
-    "n_enemy": 0,
-    "eaten": 0,
-}
-
 
 def update():
     cx, cy = data['circle_location']
