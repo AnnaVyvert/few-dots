@@ -23,7 +23,8 @@ right_positions = []
 def on_left_mouse_click(event):
     if not data["game_is_over"]:
         x, y = event.x, event.y
-        move_positions.append([x, y])
+        global move_positions
+        move_positions = [x, y]
         canvas.delete("move" + str(data['n_move']))
         data['n_move'] += 1
         create_circle(x, y, 4, fill="green", outline="#282828", width=2, tags='move' + str(data['n_move']))
@@ -79,7 +80,8 @@ def move_enemies():
             e_speed = (data['speed'] - 2) + math.cos((data['counter'] % 1000) / 318 - math.pi) + 1
             move_dot(e, fixed_hunter_position, hunter_position, e_speed)
     except Exception as e:
-        print(e)
+        # print(1, e)
+        pass
 
 
 def collapse_bombs():
@@ -156,9 +158,10 @@ def hunter_move():
     hunter_position = data['position']
     fixed_hunter_position = copy.copy(data["fix_position"])
     try:
-        move_dot(hunter_position, fixed_hunter_position, move_positions[data['n_move']], data['speed'])
+        move_dot(hunter_position, fixed_hunter_position, move_positions, data['speed'])
     except Exception as e:
-        print(e)
+        # print(2, e)
+        pass
 
 
 def move_dot(source_dot_position, fixed_dot_position, move_position, speed):
@@ -194,7 +197,7 @@ def check_hunter_collapse():
 def round_move():
     hunter_position = data['position']
     try:
-        e = copy.copy(move_positions[data['n_move']])
+        e = copy.copy(move_positions)
         collapse_condition = e[0] - consts['distance4capture'] < hunter_position[0] < e[0] + consts[
             'distance4capture'] and e[1] - consts['distance4capture'] < hunter_position[
                                  1] < e[1] + consts['distance4capture']
@@ -202,7 +205,8 @@ def round_move():
             data['position'] = e
             data['fix_position'] = e
     except Exception as e:
-        print(e)
+        # print(3, e)
+        pass
 
 
 def enemy_collapse():
@@ -272,7 +276,8 @@ def draw_all():
             create_circle(e[0], e[1], consts['circle_radius'], fill="red", outline="#282828", width=4,
                           tags='enemy' + str(i))
     except Exception as e:
-        print(e)
+        # print(4, e)
+        pass
     if not data["game_is_over"]:
         create_circle(x, y, consts['circle_radius'], fill="orange", outline="#282828", width=4, tags='hunter')
 
