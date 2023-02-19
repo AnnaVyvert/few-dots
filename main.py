@@ -6,11 +6,9 @@ import copy
 from config import consts
 from storage import data
 
-
 root = Tk()
 
 root.title("colored-dots, score: " + str(0))
-
 
 move_positions = []
 food_positions = []
@@ -92,6 +90,7 @@ def _create_circle(self, x, y, r, **kwargs):
 
 Canvas.create_circle = _create_circle
 
+
 def update():
     cx, cy = data['circle_location']
     c_vx, c_vy = data['circle_velocity']  # вытаскиваем теперь еще и скорость
@@ -150,7 +149,8 @@ def check_hunter_collapse():
     for i in range(len(food_positions)):
         e = food_positions[i]
         if e[0] is None or e[1] is None: continue
-        collapse_condition = e[0] - consts['circle_radius'] < hunter_position[0] < e[0] + consts['circle_radius'] and e[1] - consts['circle_radius'] < \
+        collapse_condition = e[0] - consts['circle_radius'] < hunter_position[0] < e[0] + consts['circle_radius'] and e[
+            1] - consts['circle_radius'] < \
                              hunter_position[1] < e[1] + consts['circle_radius']
         if collapse_condition:
             canvas.delete("food" + str(i))
@@ -165,8 +165,9 @@ def round_move():
     hunter_position = data['position']
     try:
         e = copy.copy(move_positions[data['n_move']])
-        collapse_condition = e[0] - consts['distance4capture'] < hunter_position[0] < e[0] + consts['distance4capture'] and e[1] - consts['distance4capture'] < hunter_position[
-            1] < e[1] + consts['distance4capture']
+        collapse_condition = e[0] - consts['distance4capture'] < hunter_position[0] < e[0] + consts[
+            'distance4capture'] and e[1] - consts['distance4capture'] < hunter_position[
+                                 1] < e[1] + consts['distance4capture']
         if collapse_condition:
             data['position'] = e
             data['fix_position'] = e
@@ -179,7 +180,8 @@ def enemy_collapse():
     for i in range(len(enemy_positions)):
         e = enemy_positions[i]
         if e[0] is None or e[1] is None: continue
-        collapse_condition = hunter_position[0] - consts['circle_radius'] < e[0] < hunter_position[0] + consts['circle_radius'] and \
+        collapse_condition = hunter_position[0] - consts['circle_radius'] < e[0] < hunter_position[0] + consts[
+            'circle_radius'] and \
                              hunter_position[1] - consts['circle_radius'] < \
                              e[1] < hunter_position[1] + consts['circle_radius']
         if collapse_condition:
@@ -238,7 +240,6 @@ def draw_all():
                                  tags='enemy' + str(i))
     except:
         pass
-    # рисуем кружок
     if not data["game_is_over"]:
         canvas.create_circle(x, y, consts['circle_radius'], fill="orange", outline="#282828", width=4, tags='hunter')
 
@@ -261,12 +262,10 @@ def interact_axis(p1, p2):
 
 def right_direction(p1, p2, axis):
     return -1 if p1[axis] > p2[axis] else 1
-    # return p1[axis] > p2[axis]
 
 
 def to_the_up(event):
     data['position'][1] -= data['speed']
-    # data['position'][i] += sign*data['speed']
 
 
 def to_the_left(event):
