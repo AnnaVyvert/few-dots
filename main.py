@@ -59,9 +59,9 @@ def create_bomb():
 
 
 def create_enemy():
-    x = random.randint(0, consts['canvas_width'] * random.randint(0, 1))
-    y = random.randint(0, consts['canvas_height'] * random.randint(0, 1))
-    x, y = abs(x), abs(y)
+    x = consts['canvas_width'] * random.randint(0, 1)
+    y = consts['canvas_height'] * random.randint(0, 1)
+    print(x, y)
     enemy_positions.append([x, y])
     create_circle(x, y, consts['circle_radius'], fill="red", outline="#282828", width=4,
                          tags='enemy' + str(data['n_enemy']))
@@ -235,8 +235,8 @@ def enemies_collapse():
                                  e2[1] - consts['circle_radius'] < \
                                  e[1] < e2[1] + consts['circle_radius']
             if collapse_condition:
-                e[0] = random.randint(0, consts['canvas_width'] * random.randint(0, 1))
-                e[1] = random.randint(0, consts['canvas_height'] * random.randint(0, 1))
+                e[0] = consts['canvas_width'] * random.randint(0, 1)
+                e[1] = consts['canvas_height'] * random.randint(0, 1)
 
 
 def on_tick():
