@@ -12,5 +12,8 @@ data = {
     "n_move": -1,
     "n_food": 0,
     "n_enemy": 0,
+    "n_bomb_init": 0,
+    "n_bomb": 0,
+    "n_bombs": 1,
     "eaten": 0,
 }
