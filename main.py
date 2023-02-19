@@ -3,17 +3,13 @@ from tkinter import *
 # import Tkinter as tk
 import math
 import copy
+from config import consts
 
 root = Tk()
 
 root.title("the thing, score: " + str(0))
 
-canvas_width = 500
-canvas_height = 500
-food_tick_create = 100
-enemy_tick_create = 250
-circle_radius = 10
-to_move = 4
+
 move_positions = []
 food_positions = []
 enemy_positions = []
@@ -24,7 +20,7 @@ def on_left_mouse_click(event):
     if not data["game_is_over"]:
         x, y = event.x, event.y
         move_positions.append([x, y])
-        print(x, y)
+        # print(x, y)
         canvas.delete("move" + str(data['n_move']))
         data['n_move'] += 1
         canvas.create_circle(x, y, 4, fill="green", outline="#282828", width=2, tags='move' + str(data['n_move']))
@@ -32,22 +28,22 @@ def on_left_mouse_click(event):
 
 
 def create_food():
-    x = random.randint(0, canvas_width)
-    y = random.randint(0, canvas_height)
+    x = random.randint(0, consts['canvas_width'])
+    y = random.randint(0, consts['canvas_height'])
     food_positions.append([x, y])
-    canvas.create_circle(x, y, circle_radius, fill="yellow", outline="#282828", width=4,
+    canvas.create_circle(x, y, consts['circle_radius'], fill="yellow", outline="#282828", width=4,
                          tags='food' + str(data['n_food']))
     data['n_food'] += 1
-    print(food_positions)
+    # print(food_positions)
     # print(f' {x}, {y}')
 
 
 def create_enemy():
-    x = random.randint(0, canvas_width * random.randint(0, 1))
-    y = random.randint(0, canvas_height * random.randint(0, 1))
+    x = random.randint(0, consts['canvas_width'] * random.randint(0, 1))
+    y = random.randint(0, consts['canvas_height'] * random.randint(0, 1))
     x, y = abs(x), abs(y)
     enemy_positions.append([x, y])
-    canvas.create_circle(x, y, circle_radius, fill="red", outline="#282828", width=4,
+    canvas.create_circle(x, y, consts['circle_radius'], fill="red", outline="#282828", width=4,
                          tags='enemy' + str(data['n_enemy']))
     data['n_enemy'] += 1
 
@@ -76,16 +72,16 @@ def move_enemies():
 
 def field_borders():
     hunter_position = data['position']
-    if 0 > hunter_position[0] > canvas_width:
-        hunter_position[0] = canvas_width / 2
-    if 0 > hunter_position[1] > canvas_width:
-        hunter_position[1] = canvas_height / 2
+    if 0 > hunter_position[0] > consts['canvas_width']:
+        hunter_position[0] = consts['canvas_width'] / 2
+    if 0 > hunter_position[1] > consts['canvas_width']:
+        hunter_position[1] = consts['canvas_height'] / 2
 
 
 # реакция на клик правой кнопкой мыши
 def on_right_mouse_click(event):
     x, y = event.x, event.y
-    print(f'Правая: {x}, {y}')
+    # print(f'Правая: {x}, {y}')
 
 
 def _create_circle(self, x, y, r, **kwargs):
@@ -98,8 +94,8 @@ data = {
     "game_is_over": False,
     "counter": 0,
     "mouse": (0, 0),
-    "position": [canvas_width / 2, canvas_height / 2],
-    "fix_position": [canvas_width / 2, canvas_height / 2],
+    "position": [consts['canvas_width'] / 2, consts['canvas_height'] / 2],
+    "fix_position": [consts['canvas_width'] / 2, consts['canvas_height'] / 2],
     "circle_location": (250, 100),
     "circle_velocity": (0, 0),  # добавили вектор скорости кружочка
     "speed": 3,  # снизим скорость чуток
@@ -168,8 +164,8 @@ def check_hunter_collapse():
     for i in range(len(food_positions)):
         e = food_positions[i]
         if e[0] is None or e[1] is None: continue
-        collapse_condition = e[0] - circle_radius < hunter_position[0] < e[0] + circle_radius and e[1] - circle_radius < \
-                             hunter_position[1] < e[1] + circle_radius
+        collapse_condition = e[0] - consts['circle_radius'] < hunter_position[0] < e[0] + consts['circle_radius'] and e[1] - consts['circle_radius'] < \
+                             hunter_position[1] < e[1] + consts['circle_radius']
         if collapse_condition:
             canvas.delete("food" + str(i))
             e[0], e[1] = None, None
@@ -183,8 +179,8 @@ def round_move():
     hunter_position = data['position']
     try:
         e = copy.copy(move_positions[data['n_move']])
-        collapse_condition = e[0] - to_move < hunter_position[0] < e[0] + to_move and e[1] - to_move < hunter_position[
-            1] < e[1] + to_move
+        collapse_condition = e[0] - consts['distance4capture'] < hunter_position[0] < e[0] + consts['distance4capture'] and e[1] - consts['distance4capture'] < hunter_position[
+            1] < e[1] + consts['distance4capture']
         if collapse_condition:
             data['position'] = e
             data['fix_position'] = e
@@ -197,9 +193,9 @@ def enemy_collapse():
     for i in range(len(enemy_positions)):
         e = enemy_positions[i]
         if e[0] is None or e[1] is None: continue
-        collapse_condition = hunter_position[0] - circle_radius < e[0] < hunter_position[0] + circle_radius and \
-                             hunter_position[1] - circle_radius < \
-                             e[1] < hunter_position[1] + circle_radius
+        collapse_condition = hunter_position[0] - consts['circle_radius'] < e[0] < hunter_position[0] + consts['circle_radius'] and \
+                             hunter_position[1] - consts['circle_radius'] < \
+                             e[1] < hunter_position[1] + consts['circle_radius']
         if collapse_condition:
             data["game_is_over"] = True
 
@@ -210,20 +206,20 @@ def enemies_collapse():
             e = enemy_positions[i]
             e2 = enemy_positions[j]
             if e[0] is None or e[1] is None: continue
-            collapse_condition = e2[0] - circle_radius < e[0] < e2[0] + circle_radius and \
-                                 e2[1] - circle_radius < \
-                                 e[1] < e2[1] + circle_radius
+            collapse_condition = e2[0] - consts['circle_radius'] < e[0] < e2[0] + consts['circle_radius'] and \
+                                 e2[1] - consts['circle_radius'] < \
+                                 e[1] < e2[1] + consts['circle_radius']
             if collapse_condition:
-                e[0] = random.randint(0, canvas_width * random.randint(0, 1))
-                e[1] = random.randint(0, canvas_height * random.randint(0, 1))
+                e[0] = random.randint(0, consts['canvas_width'] * random.randint(0, 1))
+                e[1] = random.randint(0, consts['canvas_height'] * random.randint(0, 1))
 
 
 def on_tick():
     update()  # обновляем положение объектов на канве
-    if data['counter'] % food_tick_create == 0:
+    if data['counter'] % consts['food_tick_create'] == 0:
         create_food()
 
-    if data['counter'] % enemy_tick_create == 0:
+    if data['counter'] % consts['enemy_tick_create'] == 0:
         create_enemy()
 
     hunter_move()
@@ -252,13 +248,13 @@ def draw_all():
     try:
         for i in range(len(enemy_positions)):
             e = enemy_positions[i]
-            canvas.create_circle(e[0], e[1], circle_radius, fill="red", outline="#282828", width=4,
+            canvas.create_circle(e[0], e[1], consts['circle_radius'], fill="red", outline="#282828", width=4,
                                  tags='enemy' + str(i))
     except:
         pass
     # рисуем кружок
     if not data["game_is_over"]:
-        canvas.create_circle(x, y, circle_radius, fill="orange", outline="#282828", width=4, tags='hunter')
+        canvas.create_circle(x, y, consts['circle_radius'], fill="orange", outline="#282828", width=4, tags='hunter')
 
 
 # def on_mouse_move(event):
@@ -284,6 +280,7 @@ def right_direction(p1, p2, axis):
 
 def to_the_up(event):
     data['position'][1] -= data['speed']
+    # data['position'][i] += sign*data['speed']
 
 
 def to_the_left(event):
@@ -303,7 +300,7 @@ def restart(event):
     data["game_is_over"] = False
 
 
-canvas = Canvas(root, width=canvas_width, height=canvas_height, bg="#111")
+canvas = Canvas(root, width=consts['canvas_width'], height=consts['canvas_height'], bg="#111")
 canvas.pack()
 canvas.focus_set()
 canvas.bind('<Button-1>', on_left_mouse_click)
