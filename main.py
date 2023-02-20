@@ -10,6 +10,9 @@ root = Tk()
 
 init_title = "colored-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"])
 root.title(init_title)
+# root.iconbitmap("ico.ico")
+photo = PhotoImage(file="assets/ico.png")
+root.iconphoto(False, photo)
 
 move_positions = []
 food_positions = []
@@ -41,7 +44,8 @@ def on_right_mouse_click(event):
         data['n_bombs'] -= 1
         data['n_bomb'] += 1
         root.title("the thing, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
-
+    if data['game_is_over']:
+        restart(0)
 
 def create_food():
     x = random.randint(0, consts['canvas_width'])
