@@ -13,7 +13,7 @@ is to collect more yellow dots.
 ## keys
 * **left-click** for movement.
 * **right-click** for setting a bomb.
-* **R** for restart after loosing the game.
+* **right-click or R** for restart after loosing the game.
 ## stats
 is shown on the title of the window.
 ## config.py
