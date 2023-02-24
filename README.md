@@ -21,3 +21,5 @@ you can edit the configuration if you want to change a conditions and parameters
 ## launch
 * **linux**: run the launch.sh
 * **windows**: run the main.py
+## screenshot
+![preview](./assets/preview.png)
