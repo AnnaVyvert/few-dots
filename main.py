@@ -8,7 +8,7 @@ from storage import data
 
 root = Tk()
 
-init_title = "colored-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"])
+init_title = "few-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"])
 root.title(init_title)
 # root.iconbitmap("ico.ico")
 photo = PhotoImage(file="assets/ico.png")
@@ -43,7 +43,7 @@ def on_right_mouse_click(event):
                       tags='bomb' + str(data['n_bomb']))
         data['n_bombs'] -= 1
         data['n_bomb'] += 1
-        root.title("the thing, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
+        root.title("few-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
     if data['game_is_over']:
         restart(0)
 
@@ -124,7 +124,7 @@ def get_bomb():
             e[0], e[1] = None, None
             # data["n_bomb_init"] += 1
             data['n_bombs'] += 1
-            root.title("the thing, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
+            root.title("few-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
 
 
 def update():
@@ -193,7 +193,7 @@ def check_hunter_collapse():
             canvas.delete("food" + str(i))
             e[0], e[1] = None, None
             data["eaten"] += 1
-            root.title("the thing, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
+            root.title("few-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"]))
             # data['position'] = e
             # data['fix_position'] = e
 
