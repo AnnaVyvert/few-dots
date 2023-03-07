@@ -11,8 +11,8 @@ root = Tk()
 init_title = "few-dots, score: " + str(data["eaten"]) + ', bombs: ' + str(data["n_bombs"])
 root.title(init_title)
 # root.iconbitmap("ico.ico")
-photo = PhotoImage(file="assets/ico.png")
-root.iconphoto(False, photo)
+# photo = PhotoImage(file="assets/ico.png")
+# root.iconphoto(False, photo)
 
 move_positions = []
 food_positions = []
